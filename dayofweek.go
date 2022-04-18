@@ -74,9 +74,27 @@ func (me Dow) IsSaturday() bool {
 func (me Dow) IsSunday() bool {
 	return me.IsSet(Sunday)
 }
-func (me Dow) OnDate(t time.Time) bool {
-	return me.IsSet(Dow(t.Weekday()))
+
+// Convert time.Weekday to dayofweek.Dow
+func (me Dow) WeekdayToDow(wd time.Weekday) Dow {
+	// Because time.Weekday starts Sunday=0 through Saturday=6 (no 7)
+	if wd == 0 {
+		return Sunday
+	}
+	return Dow(wd)
 }
+
+// See if time.Weekday is set
+func (me Dow) IsWeekday(wd time.Weekday) bool {
+	return me.IsSet(me.WeekdayToDow(wd))
+}
+
+// Check if time.Time's day is set
+func (me Dow) OnDate(t time.Time) bool {
+	return me.IsSet(me.WeekdayToDow(t.Weekday()))
+}
+
+// Check if today is set.
 func (me Dow) Today() bool {
 	return me.OnDate(time.Now())
 }

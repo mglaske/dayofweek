@@ -3,6 +3,7 @@ package dayofweek
 import (
 	"encoding/json"
 	"testing"
+	"time"
 )
 
 func TestDays(t *testing.T) {
@@ -15,6 +16,71 @@ func TestDays(t *testing.T) {
 	}
 	if newdow.IsSet(Wednesday) {
 		t.Errorf("Error, Wednesday should NOT be set")
+	}
+
+	if !newdow.IsSet(Monday) {
+		t.Errorf("Error, Monday should be set here")
+	}
+	newdow |= Saturday
+	if !newdow.IsSet(Saturday) {
+		t.Errorf("Error, Saturday should be set here")
+	}
+	newdow |= Sunday
+	if !newdow.IsSet(Sunday) {
+		t.Errorf("Error, Sunday should be set here")
+	}
+}
+
+func TestTimeModule(t *testing.T) {
+	var newdow Dow
+	if newdow.IsWeekday(time.Sunday) {
+		t.Errorf("Error, time.Sunday should not be set")
+	}
+	if newdow.IsWeekday(time.Monday) {
+		t.Errorf("Error, time.Monday should not be set")
+	}
+	if newdow.IsWeekday(time.Tuesday) {
+		t.Errorf("Error, time.Tuesday should not be set")
+	}
+	if newdow.IsWeekday(time.Wednesday) {
+		t.Errorf("Error, time.Wednesday should not be set")
+	}
+	if newdow.IsWeekday(time.Thursday) {
+		t.Errorf("Error, time.Thursday should not be set")
+	}
+	if newdow.IsWeekday(time.Friday) {
+		t.Errorf("Error, time.Friday should not be set")
+	}
+	if newdow.IsWeekday(time.Saturday) {
+		t.Errorf("Error, time.Saturday should not be set")
+	}
+	newdow |= Sunday
+	if !newdow.IsWeekday(time.Sunday) {
+		t.Errorf("Error, time.Sunday should be set")
+	}
+	newdow |= Monday
+	if !newdow.IsWeekday(time.Monday) {
+		t.Errorf("Error, time.Monday should be set")
+	}
+	newdow |= Tuesday
+	if !newdow.IsWeekday(time.Tuesday) {
+		t.Errorf("Error, time.Tuesday should be set")
+	}
+	newdow |= Wednesday
+	if !newdow.IsWeekday(time.Wednesday) {
+		t.Errorf("Error, time.Wednesday should be set")
+	}
+	newdow |= Thursday
+	if !newdow.IsWeekday(time.Thursday) {
+		t.Errorf("Error, time.Thursday should be set")
+	}
+	newdow |= Friday
+	if !newdow.IsWeekday(time.Friday) {
+		t.Errorf("Error, time.Friday should be set")
+	}
+	newdow |= Saturday
+	if !newdow.IsWeekday(time.Saturday) {
+		t.Errorf("Error, time.Saturday should be set")
 	}
 }
 
