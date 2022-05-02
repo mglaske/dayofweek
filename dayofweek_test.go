@@ -78,6 +78,9 @@ func TestTimeModule(t *testing.T) {
 	if !newdow.IsWeekday(time.Friday) {
 		t.Errorf("Error, time.Friday should be set")
 	}
+	if newdow.IsWeekday(time.Saturday) {
+		t.Errorf("Error, time.Saturday should not be set YET")
+	}
 	newdow |= Saturday
 	if !newdow.IsWeekday(time.Saturday) {
 		t.Errorf("Error, time.Saturday should be set")

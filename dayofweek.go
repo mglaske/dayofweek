@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	Monday Dow = 1 << iota
-	Tuesday
-	Wednesday
-	Thursday
-	Friday
-	Saturday
-	Sunday
+	Monday    Dow = 1 << iota // 1
+	Tuesday                   // 2
+	Wednesday                 // 4
+	Thursday                  // 8
+	Friday                    // 16
+	Saturday                  // 32
+	Sunday                    // 64
 )
 
 type Dow int
@@ -78,10 +78,12 @@ func (me Dow) IsSunday() bool {
 // Convert time.Weekday to dayofweek.Dow
 func (me Dow) WeekdayToDow(wd time.Weekday) Dow {
 	// Because time.Weekday starts Sunday=0 through Saturday=6 (no 7)
+	// so, weekday Monday=1, is 1<<1-1 = 1
+	// Tuesday=2 (1 << 2-1) = 2 ; Saturday=6 (1 << 6-1) = 32
 	if wd == 0 {
-		return Sunday
+		return Sunday // 64
 	}
-	return Dow(wd)
+	return Dow(1 << (wd - 1))
 }
 
 // See if time.Weekday is set
