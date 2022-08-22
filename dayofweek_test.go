@@ -2,6 +2,7 @@ package dayofweek
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 )
@@ -168,4 +169,54 @@ func TestString(t *testing.T) {
 	if s != "Monday, Tuesday, Thursday, Saturday" {
 		t.Errorf("Stringify failed, result=%s\n", s)
 	}
+}
+
+func ExampleSet() {
+	var x Dow
+	x.Set(true, false, true, false, true, false, true)
+	fmt.Printf("%t\n", x.IsSet(Monday))
+	fmt.Printf("%t\n", x.IsSet(Tuesday))
+	// Output:
+	// true
+	// false
+}
+
+func ExampleRemoveDay() {
+	x := New(true, false, true, false, true, false, true)
+	x.RemoveDay(Wednesday)
+
+	fmt.Printf("%s", x.String())
+	// Output: Monday, Friday, Sunday
+}
+
+func ExampleParse() {
+	var x Dow
+	s := "Mon, tuesday, sun, Fri, Saturday"
+	err := x.Parse(s)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%s", x.String())
+	// Output: Monday, Tuesday, Friday, Saturday, Sunday
+}
+
+func ExampleParseRemove() {
+	var x Dow
+	s := "Mon, tuesday, sun, Fri, Saturday"
+	err := x.Parse(s)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Parsed: %s\n", x.String())
+
+	err = x.ParseRemove("Sun, Sat")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("After Remove: %s\n", x.String())
+	// Output:
+	// Parsed: Monday, Tuesday, Friday, Saturday, Sunday
+	// After Remove: Monday, Tuesday, Friday
 }

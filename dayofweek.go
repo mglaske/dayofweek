@@ -19,12 +19,14 @@ const (
 
 type Dow int
 
+// Return a new Dow with the given days set.
 func New(mon, tue, wed, thu, fri, sat, sun bool) *Dow {
 	var d Dow
 	d.Set(mon, tue, wed, thu, fri, sat, sun)
 	return &d
 }
 
+// Set Dow to the given days, mon, tue, wed, thu, fri, sat, sun.
 func (me *Dow) Set(mon, tue, wed, thu, fri, sat, sun bool) {
 	if mon {
 		*me |= Monday
@@ -49,28 +51,42 @@ func (me *Dow) Set(mon, tue, wed, thu, fri, sat, sun bool) {
 	}
 }
 
+// Is a given day set (Eg. x.IsSet(dayofweek.Wednesday) )
 func (me Dow) IsSet(p Dow) bool {
 	return me&p == p
 }
 
+// Is Monday Set
 func (me Dow) IsMonday() bool {
 	return me.IsSet(Monday)
 }
+
+// Is Tuesday Set
 func (me Dow) IsTuesday() bool {
 	return me.IsSet(Tuesday)
 }
+
+// Is Wednesday Set
 func (me Dow) IsWednesday() bool {
 	return me.IsSet(Wednesday)
 }
+
+// Is Thursday Set
 func (me Dow) IsThursday() bool {
 	return me.IsSet(Thursday)
 }
+
+// Is Friday Set
 func (me Dow) IsFriday() bool {
 	return me.IsSet(Friday)
 }
+
+// Is Saturday Set
 func (me Dow) IsSaturday() bool {
 	return me.IsSet(Saturday)
 }
+
+// Is Sunday Set
 func (me Dow) IsSunday() bool {
 	return me.IsSet(Sunday)
 }
@@ -101,64 +117,97 @@ func (me Dow) Today() bool {
 	return me.OnDate(time.Now())
 }
 
+// Add the given dow day (eg. x.AddDay(dayofweek.Monday) )
 func (me *Dow) AddDay(p Dow) {
 	if !me.IsSet(p) {
 		*me |= p
 	}
 }
+
+// Add Monday
 func (me Dow) AddMonday() {
 	me.AddDay(Monday)
 }
+
+// Add Tuesday
 func (me Dow) AddTuesday() {
 	me.AddDay(Tuesday)
 }
+
+// Add Wednesday
 func (me Dow) AddWednesday() {
 	me.AddDay(Wednesday)
 }
+
+// Add Thursday
 func (me Dow) AddThursday() {
 	me.AddDay(Thursday)
 }
+
+// Add Friday
 func (me Dow) AddFriday() {
 	me.AddDay(Friday)
 }
+
+// Add Saturday
 func (me Dow) AddSaturday() {
 	me.AddDay(Saturday)
 }
+
+// Add Sunday
 func (me Dow) AddSunday() {
 	me.AddDay(Sunday)
 }
 
+// Remove a day from us (eg. dayofweek.Wednesday
 func (me *Dow) RemoveDay(p Dow) {
 	if me.IsSet(p) {
 		*me ^= p
 	}
 }
+
+// Remove Monday
 func (me Dow) RemoveMonday() {
 	me.RemoveDay(Monday)
 }
+
+// Remove Tuesday
 func (me Dow) RemoveTuesday() {
 	me.RemoveDay(Tuesday)
 }
+
+// Remove Wednesday
 func (me Dow) RemoveWednesday() {
 	me.RemoveDay(Wednesday)
 }
+
+// Remove Thursday
 func (me Dow) RemoveThursday() {
 	me.RemoveDay(Thursday)
 }
+
+// Remove Friday
 func (me Dow) RemoveFriday() {
 	me.RemoveDay(Friday)
 }
+
+// Remove Saturday
 func (me Dow) RemoveSaturday() {
 	me.RemoveDay(Saturday)
 }
+
+// Remove Sunday
 func (me Dow) RemoveSunday() {
 	me.RemoveDay(Sunday)
 }
 
+// Clear out all days (unset)
 func (me *Dow) Clear() {
 	*me = 0
 }
 
+// Parse updates your Dow object from a given string such as (Mon, Tuesday, wed)
+// Must be csv.  Returns error if unable to parse a value.
 func (me *Dow) Parse(s string) error {
 	s = strings.ToLower(s)
 	if strings.Contains(s, "mon") {
@@ -195,14 +244,16 @@ func (me *Dow) ParseRemove(s string) error {
 	if err != nil {
 		return err
 	}
-	*me &= other
+	*me = *me - other
 	return nil
 }
 
+// Is the supplied Dow equal to us.
 func (me Dow) Equal(o Dow) bool {
 	return me == o
 }
 
+// Pretty Print the day of week (eg. "Monday, Wednesday, Friday")
 func (me Dow) String() string {
 	var days []string
 	if me.IsMonday() {
@@ -229,10 +280,13 @@ func (me Dow) String() string {
 	return strings.Join(days, ", ")
 }
 
+// Marshal function to dump output as a string eg {"Monday, Tuesday"}
 func (me Dow) MarshalJSON() ([]byte, error) {
 	return json.Marshal(me.String())
 }
 
+// Unmarshal your JSON input into a Dow object.
+// eg: {"run_on_days": "Mon, Tue, Thursday"}
 func (me *Dow) UnmarshalJSON(d []byte) error {
 	var s string
 	if err := json.Unmarshal(d, &s); err != nil {
