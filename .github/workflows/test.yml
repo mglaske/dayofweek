@@ -1,0 +1,31 @@
+on: [push, pull_request]
+name: Testing
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.18.x, 1.19.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+    - uses: actions/checkout@v3
+    - run: go test ./...
+    - name: "Build Coverage"
+      run: go test -timeout=120s -covermode=count -coverprofile coverage.txt -bench=. -benchtime=1x ./...
+    - uses: codecov/codecov-action@v2
+    - name: "Cleanup"
+      if: always()
+      run: rm coverage.txt
+    - name: "Check: tree is clean"
+      if: always()
+      run: |
+        ALTERED=$(git status --porcelain --ignored)
+        if ! test -z "$ALTERED"; then
+          echo "Something altered these files:"
+          echo "$ALTERED"
+          git diff
+          false
+        fi
