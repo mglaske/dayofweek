@@ -19,13 +19,3 @@ jobs:
     - name: "Cleanup"
       if: always()
       run: rm coverage.txt
-    - name: "Check: tree is clean"
-      if: always()
-      run: |
-        ALTERED=$(git status --porcelain --ignored)
-        if ! test -z "$ALTERED"; then
-          echo "Something altered these files:"
-          echo "$ALTERED"
-          git diff
-          false
-        fi
