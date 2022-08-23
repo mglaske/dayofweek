@@ -1,4 +1,5 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/mglaske/dayofweek)](https://pkg.go.dev/github.com/mglaske/dayofweek)
+[![codecov](https://codecov.io/gh/mglaske/dayofweek/branch/master/graph/badge.svg?token=9L0V9FG54Q)](https://codecov.io/gh/mglaske/dayofweek)
 
 Day of Week Module
 ==================
