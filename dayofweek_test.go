@@ -171,6 +171,34 @@ func TestString(t *testing.T) {
 	}
 }
 
+func TestMarshall(t *testing.T) {
+	var one Dow
+	one.Parse("Mon, sat, tue,Thursday")
+	s, err := one.MarshalJSON()
+	if err != nil {
+		t.Errorf("Error marshalling (%v): %s\n", one, err)
+	}
+	test := "\"Monday, Tuesday, Thursday, Saturday\""
+	if string(s) != test {
+		t.Errorf("JSON Marshal failed, result=%s\n", s)
+	}
+}
+
+func TestUnMarshall(t *testing.T) {
+	datestring := "Mon, Tue, Wednesday, Sun, Friday"
+	testjson := "{\"coverage\": \"" + datestring + "\"}"
+	var into map[string]Dow
+	err := json.Unmarshal([]byte(testjson), &into)
+	if err != nil {
+		t.Errorf("Unmarshal Test failed: %s\n", err)
+	}
+	var test Dow
+	test.Parse(datestring)
+	if into["coverage"] != test {
+		t.Errorf("Error unmarshalling! unmarshalled=%v != test=%v\n", into["coverage"], test)
+	}
+}
+
 func ExampleSet() {
 	var x Dow
 	x.Set(true, false, true, false, true, false, true)
