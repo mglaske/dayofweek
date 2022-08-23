@@ -1,3 +1,5 @@
+[![PkgGoDev](https://pkg.go.dev/github.com/mglaske/dayofweek)](https://pkg.go.dev/github.com/mglaske/dayofweek)
+
 Day of Week Module
 ==================
 
